@@ -1,5 +1,5 @@
 import 'package:flame/game.dart';
 
-class SpaceJumpGame extends FlameGame with HasCollisionDetection {
-  SpaceJumpGame({super.children});
+class MyGame extends FlameGame with HasCollisionDetection {
+  MyGame({super.children});
 }

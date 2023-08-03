@@ -1,9 +1,7 @@
+import 'package:space_jump/game/views/index.dart';
+import 'package:space_jump/game/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'package:space_jump/game/game.dart';
-import 'package:space_jump/game/views/game_over_view.dart';
-import 'package:space_jump/game/views/game_view.dart';
-import 'package:space_jump/game/views/menu_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-final Game game = SpaceJumpGame();
+final Game game = MyGame();
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

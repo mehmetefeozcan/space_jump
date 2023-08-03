@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 
 class MenuView extends StatefulWidget {
@@ -13,6 +13,20 @@ class MenuView extends StatefulWidget {
 class _MenuViewState extends State<MenuView> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Material(
+      color: Colors.amber,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.play_arrow,
+              size: 64,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
