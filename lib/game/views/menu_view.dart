@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:space_jump/game/game.dart';
 
 class MenuView extends StatefulWidget {
   const MenuView(this.game, {super.key});
@@ -13,16 +14,23 @@ class MenuView extends StatefulWidget {
 class _MenuViewState extends State<MenuView> {
   @override
   Widget build(BuildContext context) {
-    return const Material(
-      color: Colors.amber,
+    MyGame game = widget.game as MyGame;
+
+    return Material(
+      color: Colors.transparent,
       child: Stack(
         children: [
           Align(
             alignment: Alignment.center,
-            child: Icon(
-              Icons.play_arrow,
-              size: 64,
-              color: Colors.white,
+            child: InkWell(
+              onTap: () {
+                game.startGame();
+              },
+              child: const Icon(
+                Icons.play_arrow,
+                size: 64,
+                color: Colors.white,
+              ),
             ),
           ),
         ],

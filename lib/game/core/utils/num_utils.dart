@@ -23,12 +23,12 @@ extension Between on num {
 }
 
 class ProbabilityGenerator {
-  final Random _rand = Random();
+  final Random random = Random();
 
   ProbabilityGenerator();
 
   bool generateWithProbability(double percent) {
-    var randomInt = _rand.nextInt(100) + 1; // generate a number 1-100 inclusive
+    var randomInt = random.nextInt(100) + 1; // 1-100
 
     if (randomInt <= percent) {
       return true;
