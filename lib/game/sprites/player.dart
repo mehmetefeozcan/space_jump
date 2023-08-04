@@ -31,9 +31,10 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     await super.onLoad();
 
     // add character hitbox
+
     await add(characterHitbox);
 
-    // await loadCharacterSprites();
+    await loadCharacterSprites();
     current = PlayerState.right;
   }
 

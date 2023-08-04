@@ -10,7 +10,7 @@ final Random random = Random();
 class ObjectManager extends Component with HasGameRef<MyGame> {
   ObjectManager({
     this.minVerticalDistanceToNextPlatform = 200,
-    this.maxVerticalDistanceToNextPlatform = 400,
+    this.maxVerticalDistanceToNextPlatform = 300,
   });
 
   // platform distance
@@ -29,8 +29,10 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
   void onMount() {
     super.onMount();
 
-    var currentX = 0.0;
-    var currentY = 0.0;
+    var currentX = (gameRef.size.x.floor() / 2).toDouble() - 50;
+
+    var currentY =
+        gameRef.size.y - (random.nextInt(gameRef.size.y.floor()) / 3) - 50;
 
     for (var i = 0; i < 100; i++) {
       if (i != 0) {
@@ -92,8 +94,9 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
       var enemy = EnemyPlatform(
         position: Vector2(generateNextX(100), generateNextY()),
       );
-      await add(enemy);
+      add(enemy);
       enemies.add(enemy);
+
       deleteEnemy();
     }
   }
