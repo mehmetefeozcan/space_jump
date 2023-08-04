@@ -2,7 +2,7 @@ import 'package:space_jump/game/game.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-enum GameState { intro, playing, gameOver }
+enum GameState { intro, playing, gameOver, paused }
 
 class GameManager extends Component with HasGameRef<MyGame> {
   GameManager();
@@ -12,6 +12,7 @@ class GameManager extends Component with HasGameRef<MyGame> {
   bool get isPlaying => state == GameState.playing;
   bool get isGameOver => state == GameState.gameOver;
   bool get isIntro => state == GameState.intro;
+  bool get isPaused => state == GameState.paused;
 
   ValueNotifier<int> score = ValueNotifier(0);
 

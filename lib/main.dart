@@ -42,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
           overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
             'gameOverlay': (context, game) => GameView(game),
             'mainMenuOverlay': (context, game) => MenuView(game),
+            'pauseOverlay': (context, game) => PauseMenuView(game),
             'gameOverOverlay': (context, game) => GameOverView(game),
           },
         ),

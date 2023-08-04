@@ -19,50 +19,60 @@ class _GameViewState extends State<GameView> {
 
     return Material(
       color: Colors.transparent,
-      child: Stack(
-        children: [
-          game.gameManager.isIntro
-              ? const SizedBox()
-              : Positioned(
-                  top: 30,
-                  left: 30,
-                  child: ScoreDisplay(game: game),
-                ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Row(
+      child: SafeArea(
+        child: Stack(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTapDown: (details) {
+                      game.player.moveLeft();
+                    },
+                    onTapUp: (details) {
+                      game.player.resetDirection();
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width / 2,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTapDown: (details) {
+                      game.player.moveRight();
+                    },
+                    onTapUp: (details) {
+                      game.player.resetDirection();
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width / 2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTapDown: (details) {
-                    game.player.moveLeft();
-                  },
-                  onTapUp: (details) {
-                    game.player.resetDirection();
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width / 2,
-                  ),
-                ),
-                GestureDetector(
-                  onTapDown: (details) {
-                    game.player.moveRight();
-                  },
-                  onTapUp: (details) {
-                    game.player.resetDirection();
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width / 2,
-                  ),
-                ),
+                game.gameManager.isIntro
+                    ? const SizedBox()
+                    : ScoreDisplay(game: game),
+                game.gameManager.isPlaying
+                    ? InkWell(
+                        onTap: () => game.pauseGame(),
+                        child: const Icon(Icons.pause,
+                            color: Colors.white, size: 48),
+                      )
+                    : const SizedBox()
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

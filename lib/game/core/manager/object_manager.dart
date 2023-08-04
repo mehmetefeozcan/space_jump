@@ -53,28 +53,30 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
 
   @override
   void update(double dt) {
-    final topOfLowestPlatform =
-        platforms.first.position.y + tallestPlatformHeight;
+    if (game.gameManager.isPlaying) {
+      final topOfLowestPlatform =
+          platforms.first.position.y + tallestPlatformHeight;
 
-    final screenBottom = gameRef.player.position.y +
-        (gameRef.size.x / 2) +
-        gameRef.screenBufferSpace;
+      final screenBottom = gameRef.player.position.y +
+          (gameRef.size.x / 2) +
+          gameRef.screenBufferSpace;
 
-    if (topOfLowestPlatform > screenBottom) {
-      var newPlatY = generateNextY();
-      var newPlatX = generateNextX(100);
-      final nextPlat = NormalPlatform(
-        position: Vector2(newPlatX, newPlatY),
-        hitbox: RectangleHitbox(size: Vector2(100, 60)),
-      );
-      add(nextPlat);
+      if (topOfLowestPlatform > screenBottom) {
+        var newPlatY = generateNextY();
+        var newPlatX = generateNextX(100);
+        final nextPlat = NormalPlatform(
+          position: Vector2(newPlatX, newPlatY),
+          hitbox: RectangleHitbox(size: Vector2(100, 60)),
+        );
+        add(nextPlat);
 
-      platforms.add(nextPlat);
+        platforms.add(nextPlat);
 
-      gameRef.gameManager.increaseScore();
+        gameRef.gameManager.increaseScore();
 
-      deletePlatform();
-      generateEnemy(newPlatX, newPlatY);
+        deletePlatform();
+        generateEnemy(newPlatX, newPlatY);
+      }
     }
 
     super.update(dt);
@@ -147,5 +149,16 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
             .toDouble();
 
     return currentHighestPlatformY - distanceToNextY;
+  }
+
+  void resetGame() {
+    while (enemies.isNotEmpty) {
+      remove(enemies.first);
+      enemies.removeAt(0);
+    }
+    while (platforms.isNotEmpty) {
+      remove(platforms.first);
+      platforms.removeAt(0);
+    }
   }
 }

@@ -40,7 +40,9 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
 
   @override
   void update(double dt) {
-    if (gameRef.gameManager.isIntro || gameRef.gameManager.isGameOver) return;
+    if (gameRef.gameManager.isIntro ||
+        gameRef.gameManager.isGameOver ||
+        gameRef.gameManager.isPaused) return;
 
     velocity.x = hAxisInput * jumpSpeed;
 

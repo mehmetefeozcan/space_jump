@@ -41,6 +41,10 @@ class MyGame extends FlameGame with HasCollisionDetection {
     if (gameManager.isGameOver) {
       return;
     }
+    if (gameManager.isPaused) {
+      overlays.add('pauseOverlay');
+      return;
+    }
 
     if (gameManager.isIntro) {
       overlays.add('mainMenuOverlay');
@@ -90,6 +94,22 @@ class MyGame extends FlameGame with HasCollisionDetection {
   void resetGame() {
     startGame();
     overlays.remove('gameOverOverlay');
+  }
+
+  void pauseGame() {
+    if (gameManager.isPaused) {
+      gameManager.state = GameState.playing;
+      overlays.remove('pauseOverlay');
+    } else {
+      gameManager.state = GameState.paused;
+    }
+  }
+
+  void goMainMenu() {
+    remove(player);
+
+    gameManager.state = GameState.intro;
+    overlays.remove('pauseOverlay');
   }
 
   void initializeGame() {
