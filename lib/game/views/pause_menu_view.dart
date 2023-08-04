@@ -44,7 +44,7 @@ class _PauseMenuViewState extends State<PauseMenuView> {
             InkWell(
               onTap: () => game.goMainMenu(),
               child: Text(
-                "Main Menu",
+                "Home",
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Colors.orange,
                       fontWeight: FontWeight.w700,

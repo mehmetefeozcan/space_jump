@@ -1,13 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:async';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:space_jump/game/core/manager/index.dart';
 import 'package:space_jump/game/sprites/index.dart';
 import 'package:space_jump/game/world.dart';
 import 'package:flame/game.dart';
-import 'package:space_jump/main.dart';
+import 'dart:async';
 
 class MyGame extends FlameGame with HasCollisionDetection {
   MyGame({super.children});
@@ -33,7 +32,11 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
     // Add gameOverlay in the background
     overlays.add('gameOverlay');
-    debugMode = true;
+
+    // show coordinte
+    if (kDebugMode) {
+      debugMode = true;
+    }
   }
 
   @override
@@ -114,6 +117,8 @@ class MyGame extends FlameGame with HasCollisionDetection {
     remove(player);
 
     gameManager.state = GameState.intro;
+
+    objectManager.resetGame();
     overlays.remove('pauseOverlay');
   }
 

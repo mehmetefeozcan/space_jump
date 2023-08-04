@@ -75,7 +75,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
         gameRef.gameManager.increaseScore();
 
         deletePlatform();
-        // generateEnemy(newPlatX, newPlatY);
+        generateEnemy(newPlatX, newPlatY);
       }
     }
 
