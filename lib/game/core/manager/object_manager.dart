@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:space_jump/game/core/utils/index.dart';
 import 'package:space_jump/game/game.dart';
 import 'package:flame/components.dart';
@@ -39,7 +40,12 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
         currentX = generateNextX(100);
         currentY = generateNextY();
       }
-      platforms.add(NormalPlatform(position: Vector2(currentX, currentY)));
+      platforms.add(
+        NormalPlatform(
+          position: Vector2(currentX, currentY),
+          hitbox: RectangleHitbox(size: Vector2(100, 60)),
+        ),
+      );
 
       add(platforms[i]);
     }
@@ -57,7 +63,10 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
     if (topOfLowestPlatform > screenBottom) {
       var newPlatY = generateNextY();
       var newPlatX = generateNextX(100);
-      final nextPlat = NormalPlatform(position: Vector2(newPlatX, newPlatY));
+      final nextPlat = NormalPlatform(
+        position: Vector2(newPlatX, newPlatY),
+        hitbox: RectangleHitbox(size: Vector2(100, 60)),
+      );
       add(nextPlat);
 
       platforms.add(nextPlat);
@@ -65,7 +74,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
       gameRef.gameManager.increaseScore();
 
       deletePlatform();
-      generateEnemy();
+      generateEnemy(newPlatX, newPlatY);
     }
 
     super.update(dt);
@@ -89,15 +98,21 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
     }
   }
 
-  Future generateEnemy() async {
+  Future generateEnemy(double xAxis, double yAxis) async {
     if (probGen.generateWithProbability(50)) {
-      var enemy = EnemyPlatform(
-        position: Vector2(generateNextX(100), generateNextY()),
-      );
-      add(enemy);
-      enemies.add(enemy);
+      var newPlatY = generateNextY();
+      var newPlatX = generateNextX(100);
 
-      deleteEnemy();
+      if (xAxis != newPlatX || yAxis != newPlatY) {
+        var enemy = EnemyPlatform(
+          position: Vector2(newPlatX, newPlatY),
+          hitbox: RectangleHitbox(size: Vector2(60, 40)),
+        );
+        add(enemy);
+        enemies.add(enemy);
+
+        deleteEnemy();
+      }
     }
   }
 

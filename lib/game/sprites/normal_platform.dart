@@ -4,7 +4,7 @@ import 'package:space_jump/game/sprites/platform.dart';
 enum NormalPlatformState { up, down }
 
 class NormalPlatform extends Platform<NormalPlatformState> {
-  NormalPlatform({super.position});
+  NormalPlatform({super.position, required super.hitbox});
 
   @override
   Future<void>? onLoad() async {

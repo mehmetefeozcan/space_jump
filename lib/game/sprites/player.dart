@@ -12,19 +12,19 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
         KeyboardHandler,
         CollisionCallbacks,
         KeyboardHandler {
-  MyPlayer({super.position, this.jumpSpeed = 550})
+  MyPlayer({super.position, this.jumpSpeed = 650})
       : super(size: Vector2(80, 110), anchor: Anchor.center, priority: 1);
 
   double jumpSpeed;
   int hAxisInput = 0;
-  final double gravity = 12;
+  final double gravity = 11;
   final int movingLeftInput = -1;
   final int movingRightInput = 1;
   Vector2 velocity = Vector2.zero();
   bool get isMovingDown => velocity.y > 0;
   GameManager gameManager = GameManager();
   // for the collision detection
-  CircleHitbox characterHitbox = CircleHitbox();
+  RectangleHitbox characterHitbox = RectangleHitbox(size: Vector2(70, 100));
 
   @override
   Future<void> onLoad() async {

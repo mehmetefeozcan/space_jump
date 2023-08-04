@@ -4,7 +4,7 @@ import 'package:space_jump/game/sprites/index.dart';
 enum EnemyPlatformState { only }
 
 class EnemyPlatform extends Platform<EnemyPlatformState> {
-  EnemyPlatform({super.position});
+  EnemyPlatform({super.position, required super.hitbox});
 
   @override
   Future<void>? onLoad() async {

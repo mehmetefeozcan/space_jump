@@ -6,7 +6,7 @@ import 'dart:math';
 abstract class Platform<T> extends SpriteGroupComponent<T>
     with HasGameRef<MyGame>, CollisionCallbacks {
   // for collision
-  final hitbox = RectangleHitbox(size: Vector2(60, 40));
+  final RectangleHitbox hitbox;
   // horizontal move
   bool isMoving = false;
 
@@ -16,6 +16,7 @@ abstract class Platform<T> extends SpriteGroupComponent<T>
 
   Platform({
     super.position,
+    required this.hitbox,
   }) : super(size: Vector2.all(100), priority: 2);
 
   @override
