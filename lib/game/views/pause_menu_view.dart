@@ -17,7 +17,7 @@ class _PauseMenuViewState extends State<PauseMenuView> {
     MyGame game = widget.game as MyGame;
 
     return Material(
-      color: Colors.transparent,
+      color: Colors.black.withOpacity(0.2),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
