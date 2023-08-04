@@ -34,7 +34,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
     var currentY =
         gameRef.size.y - (random.nextInt(gameRef.size.y.floor()) / 3) - 50;
 
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 10; i++) {
       if (i != 0) {
         currentX = generateNextX(100);
         currentY = generateNextY();
@@ -90,7 +90,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
   }
 
   Future generateEnemy() async {
-    if (probGen.generateWithProbability(20)) {
+    if (probGen.generateWithProbability(50)) {
       var enemy = EnemyPlatform(
         position: Vector2(generateNextX(100), generateNextY()),
       );
