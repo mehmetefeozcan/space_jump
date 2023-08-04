@@ -43,7 +43,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
       platforms.add(
         NormalPlatform(
           position: Vector2(currentX, currentY),
-          hitbox: RectangleHitbox(size: Vector2(100, 60)),
+          hitbox: RectangleHitbox(),
         ),
       );
 
@@ -66,7 +66,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
         var newPlatX = generateNextX(100);
         final nextPlat = NormalPlatform(
           position: Vector2(newPlatX, newPlatY),
-          hitbox: RectangleHitbox(size: Vector2(100, 60)),
+          hitbox: RectangleHitbox(),
         );
         add(nextPlat);
 
@@ -75,7 +75,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
         gameRef.gameManager.increaseScore();
 
         deletePlatform();
-        generateEnemy(newPlatX, newPlatY);
+        // generateEnemy(newPlatX, newPlatY);
       }
     }
 

@@ -7,6 +7,7 @@ import 'package:space_jump/game/core/manager/index.dart';
 import 'package:space_jump/game/sprites/index.dart';
 import 'package:space_jump/game/world.dart';
 import 'package:flame/game.dart';
+import 'package:space_jump/main.dart';
 
 class MyGame extends FlameGame with HasCollisionDetection {
   MyGame({super.children});
@@ -32,6 +33,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
     // Add gameOverlay in the background
     overlays.add('gameOverlay');
+    debugMode = true;
   }
 
   @override
@@ -43,6 +45,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
     }
     if (gameManager.isPaused) {
       overlays.add('pauseOverlay');
+      pauseEngine();
       return;
     }
 
@@ -100,12 +103,14 @@ class MyGame extends FlameGame with HasCollisionDetection {
     if (gameManager.isPaused) {
       gameManager.state = GameState.playing;
       overlays.remove('pauseOverlay');
+      resumeEngine();
     } else {
       gameManager.state = GameState.paused;
     }
   }
 
   void goMainMenu() {
+    resumeEngine();
     remove(player);
 
     gameManager.state = GameState.intro;

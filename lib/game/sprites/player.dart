@@ -1,4 +1,5 @@
 import 'package:flame/collisions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:space_jump/game/core/manager/index.dart';
 import 'package:space_jump/game/game.dart';
 import 'package:flame/components.dart';
@@ -23,8 +24,9 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
   Vector2 velocity = Vector2.zero();
   bool get isMovingDown => velocity.y > 0;
   GameManager gameManager = GameManager();
+
   // for the collision detection
-  RectangleHitbox characterHitbox = RectangleHitbox(size: Vector2(70, 100));
+  RectangleHitbox characterHitbox = RectangleHitbox(size: Vector2(80, 110));
 
   @override
   Future<void> onLoad() async {
@@ -91,8 +93,20 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
       return;
     }
 
-    bool isCollidingVertically =
-        (intersectionPoints.first.y - intersectionPoints.last.y).abs() < 5;
+    bool isCollidingVertically = true;
+
+    if (intersectionPoints.last.y == other.position.y) {
+      if (kDebugMode) {
+        print("intersectionPoints.first: ${intersectionPoints.first.y}");
+        print("intersectionPoints.last: ${intersectionPoints.last.y}");
+        print("           *********************            ");
+        print("other.position.y: ${other.position.y}");
+        print("");
+      }
+
+      isCollidingVertically =
+          (intersectionPoints.first.y - intersectionPoints.last.y) < 5.0;
+    }
 
     // if the contact is with the platform
     if (isMovingDown && isCollidingVertically) {
