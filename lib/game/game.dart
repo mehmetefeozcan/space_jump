@@ -1,10 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:space_jump/game/core/manager/index.dart';
 import 'package:space_jump/game/sprites/index.dart';
 import 'package:space_jump/game/world.dart';
+import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'dart:async';
 
@@ -34,9 +33,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
     overlays.add('gameOverlay');
 
     // show coordinte
-    if (kDebugMode) {
-      debugMode = true;
-    }
+    debugMode = false;
   }
 
   @override
@@ -140,10 +137,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
     );
     camera.followComponent(player);
 
-    objectManager = ObjectManager(
-      minVerticalDistanceToNextPlatform: 350,
-      maxVerticalDistanceToNextPlatform: 420,
-    );
+    objectManager = ObjectManager();
 
     add(objectManager);
   }

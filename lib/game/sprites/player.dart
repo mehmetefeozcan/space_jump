@@ -1,9 +1,8 @@
-import 'package:flame/collisions.dart';
-import 'package:flutter/foundation.dart';
 import 'package:space_jump/game/core/manager/index.dart';
-import 'package:space_jump/game/game.dart';
-import 'package:flame/components.dart';
 import 'package:space_jump/game/sprites/index.dart';
+import 'package:space_jump/game/game.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 
 enum PlayerState { right, left }
 
@@ -13,7 +12,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
         KeyboardHandler,
         CollisionCallbacks,
         KeyboardHandler {
-  MyPlayer({super.position, this.jumpSpeed = 650})
+  MyPlayer({super.position, this.jumpSpeed = 560})
       : super(size: Vector2(80, 110), anchor: Anchor.center, priority: 1);
 
   double jumpSpeed;
@@ -96,13 +95,13 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     bool isCollidingVertically = true;
 
     if (intersectionPoints.last.y == other.position.y) {
-      if (kDebugMode) {
+      /*  if (kDebugMode) {
         print("intersectionPoints.first: ${intersectionPoints.first.y}");
         print("intersectionPoints.last: ${intersectionPoints.last.y}");
         print("           *********************            ");
         print("other.position.y: ${other.position.y}");
         print("");
-      }
+      } */
 
       isCollidingVertically =
           (intersectionPoints.first.y - intersectionPoints.last.y) < 5.0;

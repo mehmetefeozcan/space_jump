@@ -9,14 +9,11 @@ import 'package:space_jump/game/sprites/index.dart';
 final Random random = Random();
 
 class ObjectManager extends Component with HasGameRef<MyGame> {
-  ObjectManager({
-    this.minVerticalDistanceToNextPlatform = 200,
-    this.maxVerticalDistanceToNextPlatform = 300,
-  });
+  ObjectManager();
 
   // platform distance
-  final double minVerticalDistanceToNextPlatform;
-  final double maxVerticalDistanceToNextPlatform;
+  double minVerticalDistanceToNextPlatform = 295;
+  double maxVerticalDistanceToNextPlatform = 305;
 
   // platfom & enemy list
   final List<Platform> platforms = [];
@@ -105,10 +102,13 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
       var newPlatY = generateNextY();
       var newPlatX = generateNextX(100);
 
-      if (xAxis != newPlatX || yAxis != newPlatY) {
+      if (xAxis >= newPlatX - 50 && xAxis <= newPlatX + 150) {
         var enemy = EnemyPlatform(
           position: Vector2(newPlatX, newPlatY),
-          hitbox: RectangleHitbox(size: Vector2(60, 40)),
+          hitbox: RectangleHitbox(
+            size: Vector2(30, 20),
+            position: Vector2(15, 10),
+          ),
         );
         add(enemy);
         enemies.add(enemy);
