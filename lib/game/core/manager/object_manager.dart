@@ -1,10 +1,12 @@
-import 'package:flame/collisions.dart';
+import 'package:space_jump/game/core/manager/index.dart';
 import 'package:space_jump/game/core/utils/index.dart';
 import 'package:space_jump/game/game.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'dart:math';
 
 import 'package:space_jump/game/sprites/index.dart';
+import 'package:space_jump/globals.dart';
 
 final Random random = Random();
 
@@ -22,6 +24,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
   // platform and enemy generate probability
   final probGen = ProbabilityGenerator();
   final double tallestPlatformHeight = 40;
+  GameManager gameManager = GameManager();
 
   @override
   void onMount() {
@@ -98,7 +101,9 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
   }
 
   Future generateEnemy(double xAxis, double yAxis) async {
-    if (probGen.generateWithProbability(50)) {
+    if (probGen.generateWithProbability(
+      gameLevelModel.enemyProb!.toDouble(),
+    )) {
       var newPlatY = generateNextY();
       var newPlatX = generateNextX(100);
 

@@ -1,9 +1,16 @@
+import 'package:space_jump/game/core/enums/index.dart';
+import 'package:space_jump/game/views/game_completed.dart';
 import 'package:space_jump/game/views/index.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:space_jump/game/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 
-void main() {
+void main() async {
+  /// Hive init process
+  await Hive.initFlutter();
+  await Hive.openBox(HiveEnums.gameBox.value);
+
   runApp(const MyApp());
 }
 
@@ -44,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             'mainMenuOverlay': (context, game) => MenuView(game),
             'pauseOverlay': (context, game) => PauseMenuView(game),
             'gameOverOverlay': (context, game) => GameOverView(game),
+            'completeOverlay': (context, game) => GameCompletedView(game),
           },
         ),
       ),

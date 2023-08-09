@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'dart:async';
 
+import 'package:space_jump/globals.dart';
+
 class MyGame extends FlameGame with HasCollisionDetection {
   MyGame({super.children});
 
@@ -39,10 +41,15 @@ class MyGame extends FlameGame with HasCollisionDetection {
   @override
   void update(double dt) {
     super.update(dt);
+    if (gameManager.score.value == gameLevelModel.highScore) {
+      gameManager.state = GameState.completed;
+      pauseEngine();
+    }
 
     if (gameManager.isGameOver) {
       return;
     }
+
     if (gameManager.isPaused) {
       overlays.add('pauseOverlay');
       pauseEngine();
@@ -51,6 +58,12 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
     if (gameManager.isIntro) {
       overlays.add('mainMenuOverlay');
+      return;
+    }
+
+    if (gameManager.isComp) {
+      overlays.add('completeOverlay');
+
       return;
     }
 

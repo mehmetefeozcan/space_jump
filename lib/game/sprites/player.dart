@@ -79,8 +79,9 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
   resetDirection() => hAxisInput = 0;
 
   // character jump event
-  void jump({double? specialJumpSpeed}) =>
-      velocity.y = specialJumpSpeed != null ? -specialJumpSpeed : -jumpSpeed;
+  void jump({double? specialJumpSpeed}) {
+    velocity.y = specialJumpSpeed != null ? -specialJumpSpeed : -jumpSpeed;
+  }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
