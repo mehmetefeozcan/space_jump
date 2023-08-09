@@ -54,7 +54,10 @@ class _GameCompletedViewState extends State<GameCompletedView> {
             ),
             const SizedBox(height: 40),
             InkWell(
-              onTap: () => game.goMainMenu(),
+              onTap: () {
+                game.goMainMenu();
+                setState(() {});
+              },
               child: Text(
                 "Back Menu",
                 style: Theme.of(context)

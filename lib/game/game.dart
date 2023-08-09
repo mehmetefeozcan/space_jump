@@ -61,8 +61,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
     if (gameManager.isComp) {
       overlays.add('completeOverlay');
-      pauseEngine();
-
+      //pauseEngine();
       return;
     }
 
@@ -124,14 +123,12 @@ class MyGame extends FlameGame with HasCollisionDetection {
   }
 
   void goMainMenu() {
-    remove(player);
-
+    resumeEngine();
     gameManager.state = GameState.main;
-
+    remove(player);
     objectManager.resetGame();
     overlays.remove('pauseOverlay');
     overlays.remove('completeOverlay');
-    resumeEngine();
   }
 
   void initializeGame() {

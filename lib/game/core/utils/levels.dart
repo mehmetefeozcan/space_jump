@@ -56,6 +56,20 @@ class Levels {
         gold: 9,
         enemyProb: 10,
       );
+    } else if (level > 10 && level <= 20) {
+      gameLevelModel.value = GameLevelModel(
+        level: level,
+        highScore: 50,
+        gold: 15,
+        enemyProb: 20,
+      );
+    } else if (level > 20 && level <= 50) {
+      gameLevelModel.value = GameLevelModel(
+        level: level,
+        highScore: 75,
+        gold: 25,
+        enemyProb: 35,
+      );
     }
   }
 }
