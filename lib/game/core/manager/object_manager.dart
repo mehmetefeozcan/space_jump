@@ -102,7 +102,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
 
   Future generateEnemy(double xAxis, double yAxis) async {
     if (probGen.generateWithProbability(
-      gameLevelModel.enemyProb!.toDouble(),
+      gameLevelModel.value.enemyProb!.toDouble(),
     )) {
       var newPlatY = generateNextY();
       var newPlatX = generateNextX(100);

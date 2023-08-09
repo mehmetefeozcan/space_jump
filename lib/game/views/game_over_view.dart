@@ -37,6 +37,7 @@ class _GameOverViewState extends State<GameOverView> {
               ScoreDisplay(
                 game: game,
                 isLight: true,
+                isCenter: true,
               ),
               const SizedBox(height: 20),
               ElevatedButton(

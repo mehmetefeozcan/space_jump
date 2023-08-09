@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:space_jump/game/core/enums/index.dart';
 import 'package:space_jump/game/core/utils/index.dart';
 import 'package:space_jump/game/game.dart';
+import 'package:flutter/material.dart';
+import 'package:flame/game.dart';
+import 'package:space_jump/globals.dart';
 
 class MenuView extends StatefulWidget {
   const MenuView(this.game, {super.key});
@@ -17,15 +16,7 @@ class MenuView extends StatefulWidget {
 class _MenuViewState extends State<MenuView> {
   @override
   void initState() {
-    final box = Hive.box(HiveEnums.gameBox.value);
-
-    final level = box.get(HiveEnums.level.value);
-
-    if (level == null) {
-      box.put(HiveEnums.level.value, 1);
-    }
-
-    Levels().setLevelStat(level);
+    Levels().setLevelStat();
     setState(() {});
 
     super.initState();
@@ -55,11 +46,12 @@ class _MenuViewState extends State<MenuView> {
                 game.startGame();
               },
               child: Text(
-                "START",
+                "LEVEL ${gameLevelModel.value.level} \nSTART",
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Colors.purple,
                       fontWeight: FontWeight.w700,
                     ),
+                textAlign: TextAlign.center,
               ),
             )
           ],

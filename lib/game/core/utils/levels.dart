@@ -1,10 +1,31 @@
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:space_jump/game/core/enums/index.dart';
 import 'package:space_jump/game/core/game_model.dart';
 import 'package:space_jump/globals.dart';
 
 class Levels {
-  void setLevelStat(int level) {
+  Future updateLevel() async {
+    final box = Hive.box(HiveEnums.gameBox.value);
+
+    final level = box.get(HiveEnums.level.value);
+
+    await box.put(HiveEnums.level.value, level + 1);
+
+    setLevelStat();
+  }
+
+  void setLevelStat() {
+    final box = Hive.box(HiveEnums.gameBox.value);
+    int level = 0;
+
+    if (box.get(HiveEnums.level.value) == null) {
+      box.put(HiveEnums.level.value, 1);
+      level = box.get(HiveEnums.level.value);
+    } else {
+      level = box.get(HiveEnums.level.value);
+    }
     if (level == 1) {
-      gameLevelModel = GameLevelModel(
+      gameLevelModel.value = GameLevelModel(
         // bölüm
         level: level,
         // bölüm max score
@@ -15,7 +36,7 @@ class Levels {
         enemyProb: 0,
       );
     } else if (level > 1 && level < 4) {
-      gameLevelModel = GameLevelModel(
+      gameLevelModel.value = GameLevelModel(
         level: level,
         highScore: 15,
         gold: 5,
