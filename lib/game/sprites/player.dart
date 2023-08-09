@@ -41,7 +41,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
 
   @override
   void update(double dt) {
-    if (gameRef.gameManager.isIntro ||
+    if (gameRef.gameManager.isMain ||
         gameRef.gameManager.isGameOver ||
         gameRef.gameManager.isPaused) return;
 

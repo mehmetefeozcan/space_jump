@@ -35,12 +35,26 @@ class Levels {
         // bölümün enemy olasılığı
         enemyProb: 0,
       );
-    } else if (level > 1 && level < 4) {
+    } else if (level > 1 && level <= 3) {
       gameLevelModel.value = GameLevelModel(
         level: level,
         highScore: 15,
         gold: 5,
+        enemyProb: 3,
+      );
+    } else if (level > 3 && level <= 5) {
+      gameLevelModel.value = GameLevelModel(
+        level: level,
+        highScore: 20,
+        gold: 7,
         enemyProb: 5,
+      );
+    } else if (level > 5 && level <= 10) {
+      gameLevelModel.value = GameLevelModel(
+        level: level,
+        highScore: 30,
+        gold: 9,
+        enemyProb: 10,
       );
     }
   }

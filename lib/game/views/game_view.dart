@@ -59,7 +59,7 @@ class _GameViewState extends State<GameView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                game.gameManager.isIntro
+                game.gameManager.isMain
                     ? const SizedBox()
                     : ScoreDisplay(game: game),
                 game.gameManager.isPlaying
