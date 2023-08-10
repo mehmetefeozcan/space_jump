@@ -172,11 +172,4 @@ class MyGame extends FlameGame with HasCollisionDetection {
     player = MyPlayer();
     await add(player);
   }
-
-  /* getPercent() {
-    gameManager.gamePercent.value =
-        (100 * gameManager.score.value) / gameLevelModel.value.highScore!;
-    gameManager.gamePercent.value = gamePercent.value / 100;
-    return;
-  } */
 }
