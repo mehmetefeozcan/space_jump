@@ -63,6 +63,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
     if (gameManager.isComp) {
       overlays.add('completeOverlay');
+      player.jump(specialJumpSpeed: 1000);
       //pauseEngine();
       return;
     }
