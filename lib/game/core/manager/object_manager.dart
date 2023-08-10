@@ -14,8 +14,8 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
   ObjectManager();
 
   // platform distance
-  double minVerticalDistanceToNextPlatform = 295;
-  double maxVerticalDistanceToNextPlatform = 305;
+  double minVerticalDistanceToNextPlatform = 290;
+  double maxVerticalDistanceToNextPlatform = 300;
 
   // platfom & enemy list
   final List<Platform> platforms = [];
