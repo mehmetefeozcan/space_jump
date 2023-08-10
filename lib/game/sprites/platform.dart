@@ -12,7 +12,7 @@ abstract class Platform<T> extends SpriteGroupComponent<T>
 
   final Vector2 velocity = Vector2.zero();
   double direction = 1;
-  double speed = 35;
+  double speed = 40;
 
   Platform({
     super.position,
@@ -28,7 +28,7 @@ abstract class Platform<T> extends SpriteGroupComponent<T>
 
     // for the some platform can move x axis
     final int rand = Random().nextInt(100);
-    if (rand > 80) isMoving = true;
+    if (rand > 0) isMoving = true;
   }
 
   void _move(double dt) {

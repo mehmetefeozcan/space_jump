@@ -88,7 +88,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     super.onCollision(intersectionPoints, other);
 
     // if the contact is with the enemy
-    if (other is EnemyPlatform && gameManager.isPlaying) {
+    if (other is EnemyPlatform && gameRef.gameManager.isPlaying) {
       gameRef.loseGame();
       return;
     }

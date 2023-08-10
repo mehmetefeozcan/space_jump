@@ -18,7 +18,7 @@ class NormalPlatform extends Platform<NormalPlatformState> {
     current = NormalPlatformState.up;
 
     // Sprite Size
-    size = Vector2(80, 40);
+    size = Vector2(60, 30);
   }
 
   @override

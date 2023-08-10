@@ -66,7 +66,10 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
         var newPlatX = generateNextX(100);
         final nextPlat = NormalPlatform(
           position: Vector2(newPlatX, newPlatY),
-          hitbox: RectangleHitbox(),
+          hitbox: RectangleHitbox(
+            size: Vector2(30, 15),
+            position: Vector2(15, 7.5),
+          ),
         );
         add(nextPlat);
 
@@ -112,8 +115,8 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
         var enemy = EnemyPlatform(
           position: Vector2(newPlatX, newPlatY),
           hitbox: RectangleHitbox(
-            size: Vector2(30, 20),
-            position: Vector2(15, 10),
+            size: Vector2(25, 15),
+            position: Vector2(12.5, 7.5),
           ),
         );
         add(enemy);

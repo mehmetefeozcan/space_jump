@@ -19,7 +19,7 @@ class MyWorld extends ParallaxComponent<MyGame> {
       fill: LayerFill.width,
       repeat: ImageRepeat.repeat,
       baseVelocity: Vector2(0, -5),
-      velocityMultiplierDelta: Vector2(0, 1.2),
+      velocityMultiplierDelta: Vector2(0, 2),
     );
   }
 }

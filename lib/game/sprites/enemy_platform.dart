@@ -16,6 +16,6 @@ class EnemyPlatform extends Platform<EnemyPlatformState> {
 
     current = EnemyPlatformState.only;
 
-    size = Vector2(60, 40);
+    size = Vector2(50, 20);
   }
 }
