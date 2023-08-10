@@ -1,7 +1,7 @@
 import 'package:space_jump/game/game.dart';
-import 'package:space_jump/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:space_jump/globals.dart';
 
 class ScoreDisplay extends StatelessWidget {
   const ScoreDisplay({

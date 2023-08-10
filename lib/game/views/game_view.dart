@@ -1,4 +1,4 @@
-import 'package:space_jump/game/views/index.dart';
+import 'package:space_jump/game/widgets/index.dart';
 import 'package:space_jump/game/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -22,6 +22,14 @@ class _GameViewState extends State<GameView> {
       child: SafeArea(
         child: Stack(
           children: [
+            game.gameManager.isPlaying
+                ? Align(
+                    alignment: Alignment.bottomCenter,
+                    child: CustomCompleteBar(
+                      value: game.gameManager.gamePercent,
+                    ),
+                  )
+                : const SizedBox(),
             SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Row(

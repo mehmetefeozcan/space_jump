@@ -88,7 +88,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     super.onCollision(intersectionPoints, other);
 
     // if the contact is with the enemy
-    if (other is EnemyPlatform) {
+    if (other is EnemyPlatform && !gameManager.isComp) {
       gameRef.loseGame();
       return;
     }
@@ -96,13 +96,11 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     bool isCollidingVertically = true;
 
     if (intersectionPoints.last.y == other.position.y) {
-      /*  if (kDebugMode) {
-        print("intersectionPoints.first: ${intersectionPoints.first.y}");
-        print("intersectionPoints.last: ${intersectionPoints.last.y}");
-        print("           *********************            ");
-        print("other.position.y: ${other.position.y}");
-        print("");
-      } */
+      /* print("intersectionPoints.first: ${intersectionPoints.first.y}");
+      print("intersectionPoints.last: ${intersectionPoints.last.y}");
+      print("           *********************            ");
+      print("other.position.y: ${other.position.y}");
+      print(""); */
 
       isCollidingVertically =
           (intersectionPoints.first.y - intersectionPoints.last.y) < 5.0;

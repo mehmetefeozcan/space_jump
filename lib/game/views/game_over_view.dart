@@ -1,7 +1,7 @@
-import 'package:space_jump/game/views/index.dart';
 import 'package:space_jump/game/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:space_jump/game/widgets/index.dart';
 
 class GameOverView extends StatefulWidget {
   const GameOverView(this.game, {super.key});
