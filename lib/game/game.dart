@@ -42,10 +42,6 @@ class MyGame extends FlameGame with HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
 
-    if (gameManager.score.value == gameLevelModel.value.highScore) {
-      gameManager.state = GameState.completed;
-    }
-
     if (gameManager.isGameOver) {
       return;
     }
@@ -69,6 +65,10 @@ class MyGame extends FlameGame with HasCollisionDetection {
     }
 
     if (gameManager.isPlaying) {
+      if (gameManager.score.value == gameLevelModel.value.highScore) {
+        gameManager.state = GameState.completed;
+        return;
+      }
       final Rect worldBounds = Rect.fromLTRB(
         0,
         camera.position.y - screenBufferSpace,
