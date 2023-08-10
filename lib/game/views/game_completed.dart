@@ -1,5 +1,8 @@
+import 'package:space_jump/game/core/enums/index.dart';
 import 'package:space_jump/game/core/utils/index.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:space_jump/game/game.dart';
+import 'package:space_jump/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 
@@ -16,7 +19,17 @@ class _GameCompletedViewState extends State<GameCompletedView> {
   @override
   void initState() {
     Levels().updateLevel();
+
+    addGold();
     super.initState();
+  }
+
+  addGold() async {
+    final box = Hive.box(HiveEnums.gameBox.value);
+    if (box.get(HiveEnums.gold.value) != null) {
+      int gold = box.get(HiveEnums.gold.value);
+      await box.put(HiveEnums.gold.value, gold + gameLevelModel.value.gold!);
+    }
   }
 
   @override
@@ -35,6 +48,14 @@ class _GameCompletedViewState extends State<GameCompletedView> {
                   .textTheme
                   .displaySmall!
                   .copyWith(color: Colors.white),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "You earn ${gameLevelModel.value.gold} gold",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: Colors.orangeAccent),
             ),
             const SizedBox(height: 40),
             InkWell(

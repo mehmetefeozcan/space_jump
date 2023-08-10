@@ -126,12 +126,22 @@ class MyGame extends FlameGame with HasCollisionDetection {
   }
 
   void goMainMenu() {
-    resumeEngine();
-    gameManager.state = GameState.main;
-    remove(player);
-    objectManager.resetGame();
-    overlays.remove('pauseOverlay');
-    overlays.remove('completeOverlay');
+    try {
+      resumeEngine();
+      gameManager.state = GameState.main;
+      remove(player);
+      objectManager.resetGame();
+      overlays.remove('pauseOverlay');
+      overlays.remove('completeOverlay');
+    } catch (e) {
+      resumeEngine();
+      gameManager.state = GameState.main;
+
+      objectManager.resetGame();
+      overlays.remove('gameOverOverlay');
+      overlays.remove('pauseOverlay');
+      overlays.remove('completeOverlay');
+    }
   }
 
   void initializeGame() {
