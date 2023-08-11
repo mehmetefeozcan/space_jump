@@ -27,6 +27,8 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
   // for the collision detection
   RectangleHitbox characterHitbox = RectangleHitbox(size: Vector2(80, 110));
 
+  int bounce = 100;
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -49,11 +51,14 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
 
     final double dashHorizontalCenter = size.x / 2;
 
+    // Ekran Sınırlarından geri sekme için
     if (position.x < dashHorizontalCenter) {
-      position.x = gameRef.size.x - (dashHorizontalCenter);
+      position.x += bounce;
+      current = PlayerState.right;
     }
     if (position.x > gameRef.size.x - (dashHorizontalCenter)) {
-      position.x = dashHorizontalCenter;
+      position.x -= bounce;
+      current = PlayerState.left;
     }
 
     velocity.y += gravity;
@@ -65,8 +70,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
   moveRight() {
     hAxisInput = 0;
     current = PlayerState.right;
-
-    hAxisInput += movingRightInput;
+    hAxisInput -= movingLeftInput;
   }
 
   moveLeft() {
