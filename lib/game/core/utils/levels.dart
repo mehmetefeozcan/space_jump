@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:space_jump/game/core/enums/index.dart';
-import 'package:space_jump/game/core/game_model.dart';
+import 'package:space_jump/game/models/game_model.dart';
 
 import 'package:space_jump/globals.dart';
 

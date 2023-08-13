@@ -16,21 +16,42 @@ class MenuView extends StatefulWidget {
 }
 
 class _MenuViewState extends State<MenuView> {
-  int gold = 0;
   @override
   void initState() {
-    final box = Hive.box(HiveEnums.gameBox.value);
-
-    if ((box.get(HiveEnums.gold.value) == null)) {
-      box.put(HiveEnums.gold.value, 0);
-    } else if (box.get(HiveEnums.gold.value) != null) {
-      gold = box.get(HiveEnums.gold.value);
-    }
+    hiveAllInit();
 
     Levels().setLevelStat();
-    setState(() {});
 
+    setState(() {});
     super.initState();
+  }
+
+  Future hiveAllInit() async {
+    final box = Hive.box(HiveEnums.gameBox.value);
+
+    // For Gold
+    if (box.get(HiveEnums.gold.value) == null) {
+      box.put(HiveEnums.gold.value, 0);
+    } else if (box.get(HiveEnums.gold.value) != null) {
+      gold.value = box.get(HiveEnums.gold.value);
+    }
+
+    // For Character
+    if (box.get(HiveEnums.character.value) == null) {
+      box.put(HiveEnums.character.value, 'grey');
+    } else if (box.get(HiveEnums.gold.value) != null) {
+      characterColor.value = box.get(HiveEnums.character.value);
+    }
+
+    // For Store
+    if (box.get(HiveEnums.store.value) == null) {
+      final data = [
+        {"type": "character", "color": "grey", "price": 0, "isUnlock": true},
+        {"type": "character", "color": "green", "price": 10, "isUnlock": false},
+        {"type": "character", "color": "pink", "price": 20, "isUnlock": false},
+      ];
+      box.put(HiveEnums.store.value, data);
+    }
   }
 
   @override
@@ -46,7 +67,7 @@ class _MenuViewState extends State<MenuView> {
               children: [
                 const SizedBox(width: 10),
                 Text(
-                  "Gold: $gold",
+                  "Gold: ${gold.value}",
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
