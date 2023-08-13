@@ -3,6 +3,7 @@ import 'package:space_jump/game/sprites/index.dart';
 import 'package:space_jump/game/game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:space_jump/globals.dart';
 
 enum PlayerState { right, left }
 
@@ -128,8 +129,10 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
 
   Future<void> loadCharacterSprites() async {
     // Load & configure sprite assets
-    final left = await gameRef.loadSprite('character/pl_grey_left.png');
-    final right = await gameRef.loadSprite('character/pl_grey_right.png');
+    final left = await gameRef
+        .loadSprite('character/pl_${characterColor.value}_left.png');
+    final right = await gameRef
+        .loadSprite('character/pl_${characterColor.value}_right.png');
 
     sprites = <PlayerState, Sprite>{
       PlayerState.left: left,

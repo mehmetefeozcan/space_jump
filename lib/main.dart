@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:space_jump/game/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
+import 'package:space_jump/game/views/store_view.dart';
 
 void main() async {
   /// Hive init process
@@ -48,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
           game: game,
           overlayBuilderMap: <String, Widget Function(BuildContext, Game)>{
             'gameOverlay': (context, game) => GameView(game),
+            'storeOverlay': (context, game) => StoreView(game),
             'mainMenuOverlay': (context, game) => MenuView(game),
             'pauseOverlay': (context, game) => PauseMenuView(game),
             'gameOverOverlay': (context, game) => GameOverView(game),

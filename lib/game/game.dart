@@ -57,6 +57,11 @@ class MyGame extends FlameGame with HasCollisionDetection {
       return;
     }
 
+    if (gameManager.isStore) {
+      overlays.add('storeOverlay');
+      return;
+    }
+
     if (gameManager.isComp) {
       overlays.add('completeOverlay');
       player.jump(specialJumpSpeed: 1000);
@@ -132,6 +137,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
       remove(player);
       objectManager.resetGame();
       overlays.remove('pauseOverlay');
+      overlays.remove('storeOverlay');
       overlays.remove('completeOverlay');
     } catch (e) {
       resumeEngine();
@@ -139,9 +145,15 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
       objectManager.resetGame();
       overlays.remove('gameOverOverlay');
+      overlays.remove('storeOverlay');
       overlays.remove('pauseOverlay');
       overlays.remove('completeOverlay');
     }
+  }
+
+  void goStore() {
+    gameManager.state = GameState.store;
+    overlays.remove('mainMenuOverlay');
   }
 
   void initializeGame() {
