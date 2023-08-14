@@ -11,7 +11,7 @@ class CustomCompleteBar extends StatelessWidget {
       valueListenable: value,
       builder: (context, value, child) => LinearProgressIndicator(
         value: value,
-        minHeight: 2,
+        minHeight: 8,
       ),
     );
   }

@@ -1,7 +1,8 @@
+import 'package:space_jump/game/core/manager/index.dart';
+import 'package:space_jump/game/models/store_model.dart';
 import 'package:space_jump/game/core/enums/index.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:space_jump/game/game.dart';
-import 'package:space_jump/game/models/store_model.dart';
 import 'package:space_jump/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
@@ -19,6 +20,30 @@ class _StoreViewState extends State<StoreView> {
   late Box box;
 
   late List<StoreModel> storeData;
+
+  Future changeCharacter(StoreModel model) async {
+    characterColor.value = model.color!;
+    box.put(HiveEnums.character.value, model.color!);
+  }
+
+  Future buyCharacter(StoreModel model, int index) async {
+    if (gold.value >= model.price!) {
+      // set selected character
+      characterColor.value = model.color!;
+      box.put(HiveEnums.character.value, model.color!);
+
+      // increase total gold
+      gold.value -= model.price!;
+      box.put(HiveEnums.gold.value, gold.value);
+
+      // update model
+      storeData[index].isUnlock = true;
+
+      // List<StoreModel> to List<Json>
+      final data = storeData.map((e) => e.toJson()).toList();
+      await box.put(HiveEnums.store.value, data);
+    }
+  }
 
   @override
   void initState() {
@@ -43,7 +68,9 @@ class _StoreViewState extends State<StoreView> {
                 const SizedBox(width: 10),
                 InkWell(
                   onTap: () {
-                    game.goMainMenu();
+                    game.overlays.remove('storeOverlay');
+                    game.gameManager.state = GameState.main;
+                    game.overlays.add('mainMenuOverlay');
                   },
                   child: const Icon(
                     Icons.arrow_back,
@@ -70,7 +97,7 @@ class _StoreViewState extends State<StoreView> {
                     shrinkWrap: true,
                     itemCount: storeData.length,
                     itemBuilder: (context, index) {
-                      return characterCard(storeData[index]);
+                      return characterCard(context, storeData[index], index);
                     },
                   ),
                 ],
@@ -82,12 +109,14 @@ class _StoreViewState extends State<StoreView> {
     );
   }
 
-  Widget characterCard(StoreModel model) {
+  Widget characterCard(BuildContext context, StoreModel model, int index) {
+    final width = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.only(left: 150, right: 150, bottom: 30),
+      padding:
+          EdgeInsets.only(left: width * 0.35, right: width * 0.35, bottom: 30),
       child: Container(
-        width: 100,
-        height: 100,
+        padding: EdgeInsets.zero,
         decoration: BoxDecoration(
           border: Border.all(
             color: characterColor.value == model.color!
@@ -98,42 +127,43 @@ class _StoreViewState extends State<StoreView> {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Stack(
-          children: [
-            Center(
-              child: InkWell(
-                onTap: () {
-                  model.isUnlock!
-                      ? setState(() {
-                          characterColor.value = model.color!;
-                          box.put(HiveEnums.character.value, model.color!);
-                        })
-                      : setState(
-                          () {
-                            if (gold.value >= model.price!) {
-                              characterColor.value = model.color!;
-                              box.put(HiveEnums.character.value, model.color!);
-                              gold.value -= model.price!;
-                            }
-                          },
-                        );
-                },
-                child: Image.asset(
-                  'assets/images/character/pl_${model.color!}_right.png',
-                  scale: 0.4,
+        child: InkWell(
+          onTap: () async {
+            model.isUnlock!
+                ? await changeCharacter(model)
+                : await buyCharacter(model, index);
+            setState(() {});
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/character/pl_${model.color!}_right.png',
+                      scale: 0.4,
+                    ),
+                    Text(
+                      model.isUnlock! ? "Select" : "${model.price} Gold",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    const SizedBox(height: 5),
+                  ],
                 ),
               ),
-            ),
-            model.isUnlock!
-                ? const SizedBox()
-                : Center(
-                    child: Icon(
-                      Icons.lock_outline,
-                      color: Colors.black.withOpacity(0.8),
-                      size: 80,
-                    ),
-                  ),
-          ],
+              Center(
+                child: model.isUnlock!
+                    ? const SizedBox()
+                    : Icon(
+                        Icons.lock_outline,
+                        color: Colors.black.withOpacity(0.8),
+                        size: 40,
+                      ),
+              )
+            ],
+          ),
         ),
       ),
     );
