@@ -18,7 +18,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
   // Set World
   final MyWorld world = MyWorld();
-  late MyPlayer player;
+  late Player player;
 
   // Other Variables
   int screenBufferSpace = 300;
@@ -65,7 +65,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
     if (gameManager.isComp) {
       overlays.add('completeOverlay');
-      player.jump(specialJumpSpeed: 1000);
+
       //pauseEngine();
       return;
     }
@@ -82,12 +82,12 @@ class MyGame extends FlameGame with HasCollisionDetection {
         camera.position.y + world.size.y,
       );
       camera.worldBounds = worldBounds;
-      if (player.isMovingDown) {
+      if (player.isFall) {
         camera.worldBounds = worldBounds;
       }
 
       var isInTopHalfOfScreen = player.position.y <= (world.size.y / 2);
-      if (!player.isMovingDown && isInTopHalfOfScreen) {
+      if (!player.isFall && isInTopHalfOfScreen) {
         camera.followComponent(player);
       }
 
@@ -168,7 +168,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
     // clear previously added
     if (children.contains(objectManager)) objectManager.removeFromParent();
     // reset player stat
-    player.reset();
+
     // set camera follow
     camera.worldBounds = Rect.fromLTRB(
       0,
@@ -185,7 +185,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
   // if you have many character comp select and init in this code block
   Future setCharacter() async {
-    player = MyPlayer();
+    player = Player(character: 'Ninja Frog');
     await add(player);
   }
 }

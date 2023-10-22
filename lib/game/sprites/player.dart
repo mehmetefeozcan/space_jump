@@ -1,137 +1,199 @@
-import 'package:space_jump/game/core/manager/index.dart';
-import 'package:space_jump/game/sprites/index.dart';
-import 'package:space_jump/game/game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:space_jump/globals.dart';
+import 'dart:async';
 
-enum PlayerState { right, left }
+import 'package:space_jump/game/game.dart';
+import 'package:space_jump/game/sprites/index.dart';
 
-class MyPlayer extends SpriteGroupComponent<PlayerState>
-    with
-        HasGameRef<MyGame>,
-        KeyboardHandler,
-        CollisionCallbacks,
-        KeyboardHandler {
-  MyPlayer({super.position, this.jumpSpeed = 560})
-      : super(size: Vector2(80, 110), anchor: Anchor.center, priority: 1);
+enum PlayerState {
+  idle,
+  running,
+  jumping,
+  falling,
+  hit,
+  appearing,
+  disappearing
+}
 
-  double jumpSpeed;
-  int hAxisInput = 0;
-  final double gravity = 11;
-  final int movingLeftInput = -1;
-  final int movingRightInput = 1;
+class Player extends SpriteAnimationGroupComponent
+    with HasGameRef<MyGame>, KeyboardHandler, CollisionCallbacks {
+  String character;
+  Player({position, required this.character}) : super(position: position);
+
+  late final SpriteAnimation hitAnimation;
+  late final SpriteAnimation idleAnimation;
+  late final SpriteAnimation runningAnimation;
+  late final SpriteAnimation jumpingAnimation;
+  late final SpriteAnimation fallingAnimation;
+  late final SpriteAnimation appearingAnimation;
+  late final SpriteAnimation disappearingAnimation;
+  final double _stepTime = 0.05;
+  final double _gravity = 9.8;
+  final double _jumpForce = 580;
+  final double _terminalVelocity = 300;
+
+  bool hasJumped = false;
+  bool isFaceRight = true;
+  bool isFall = false;
+
+  double horizontalMovement = 0;
   Vector2 velocity = Vector2.zero();
-  bool get isMovingDown => velocity.y > 0;
+  Vector2 startingPosition = Vector2.zero();
 
-  GameManager gameManager = GameManager();
+  double fixedDeltaTime = 1 / 60;
+  double accumulatedTime = 0;
 
-  // for the collision detection
-  RectangleHitbox characterHitbox = RectangleHitbox(size: Vector2(80, 110));
+  CustomHitbox hitbox = CustomHitbox(
+    offsetX: 16,
+    offsetY: 16,
+    width: 32,
+    height: 32,
+  );
 
-  int bounce = 100;
+  double _dt = 0;
 
   @override
-  Future<void> onLoad() async {
-    await super.onLoad();
+  FutureOr<void> onLoad() {
+    _loadAllAnimations();
 
-    // add character hitbox
+    size = Vector2(64, 64);
 
-    await add(characterHitbox);
+    startingPosition = Vector2(position.x, position.y);
 
-    await loadCharacterSprites();
-    current = PlayerState.right;
+    add(
+      RectangleHitbox(
+        position: Vector2(hitbox.offsetX, hitbox.offsetY),
+        size: Vector2(hitbox.width, hitbox.height),
+      ),
+    );
+    //debugMode = true;
+    return super.onLoad();
   }
 
   @override
   void update(double dt) {
-    if (gameRef.gameManager.isMain ||
-        gameRef.gameManager.isGameOver ||
-        gameRef.gameManager.isPaused) return;
+    _dt = dt;
+    accumulatedTime += dt;
 
-    velocity.x = hAxisInput * jumpSpeed;
+    while (accumulatedTime >= fixedDeltaTime) {
+      _updatePlayerState();
+      _applyGravity(fixedDeltaTime);
 
-    final double dashHorizontalCenter = size.x / 2;
-
-    // Ekran Sınırlarından geri sekme için
-    if (position.x < dashHorizontalCenter) {
-      position.x += bounce;
-      current = PlayerState.right;
+      accumulatedTime -= fixedDeltaTime;
     }
-    if (position.x > gameRef.size.x - (dashHorizontalCenter)) {
-      position.x -= bounce;
-      current = PlayerState.left;
-    }
-
-    velocity.y += gravity;
-
-    position += velocity * dt;
     super.update(dt);
   }
 
-  moveRight() {
-    hAxisInput = 0;
-    current = PlayerState.right;
-    hAxisInput -= movingLeftInput;
-  }
-
-  moveLeft() {
-    hAxisInput = 0;
-    current = PlayerState.left;
-
-    hAxisInput += movingLeftInput;
-  }
-
-  resetDirection() => hAxisInput = 0;
-
-  // character jump event
-  void jump({double? specialJumpSpeed}) {
-    velocity.y = specialJumpSpeed != null ? -specialJumpSpeed : -jumpSpeed;
-  }
-
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Platform) _playerJump(_dt);
 
-    // if the contact is with the enemy
-    /*  if (other is Platform && gameRef.gameManager.isPlaying) {
-      gameRef.loseGame();
-      return;
-    } */
+    super.onCollisionStart(intersectionPoints, other);
+  }
 
-    bool isCollidingVertically = true;
+  void _loadAllAnimations() async {
+    jumpingAnimation = _spriteAnimation('Jump', 1);
+    fallingAnimation = _spriteAnimation('Fall', 1);
+    hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
 
-    if (intersectionPoints.last.y == other.position.y) {
-      isCollidingVertically =
-          (intersectionPoints.first.y - intersectionPoints.last.y) < 5.0;
-    }
+    // List of all Animations
+    animations = {
+      PlayerState.jumping: jumpingAnimation,
+      PlayerState.falling: fallingAnimation,
+      PlayerState.hit: hitAnimation,
+    };
 
-    // if the contact is with the platform
-    if (isMovingDown && isCollidingVertically) {
-      switch (other) {
-        case Platform():
-          jump();
-          return;
+    // Set Current Animation
+    current = PlayerState.idle;
+  }
+
+  SpriteAnimation _spriteAnimation(String state, int amount) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('character/$character/$state (32x32).png'),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: _stepTime,
+        textureSize: Vector2.all(32),
+      ),
+    );
+  }
+
+  void _playerJump(double dt) {
+    velocity.y = -_jumpForce;
+    position.y += velocity.y * dt;
+    hasJumped = false;
+  }
+
+  void _applyGravity(double dt) {
+    velocity.y += _gravity;
+    velocity.y = velocity.y.clamp(-_jumpForce, _terminalVelocity);
+    position.y += velocity.y * dt;
+  }
+
+  /* void _checkVerticalCollisions() {
+    for (final block in gameRef.collisionBlocks) {
+      if (block.isPlatform) {
+        if (checkCollision(this, block)) {
+          if (velocity.y > 0) {
+            velocity.y = 0;
+            position.y = block.y - hitbox.height - hitbox.offsetY;
+            isOnGround = true;
+            break;
+          }
+        }
+      } else {
+        if (checkCollision(this, block)) {
+          if (velocity.y > 0) {
+            velocity.y = 0;
+            position.y = block.y - hitbox.height - hitbox.offsetY;
+            isOnGround = true;
+            break;
+          }
+          if (velocity.y < 0) {
+            velocity.y = 0;
+            position.y = block.y + block.height - hitbox.offsetY;
+          }
+        }
       }
     }
-  }
+  } */
 
-  void reset() {
-    velocity = Vector2.zero();
-    current = PlayerState.right;
-    position = Vector2(gameRef.size.x / 2, gameRef.size.y / 2);
-  }
+  void _updatePlayerState() {
+    PlayerState playerState = PlayerState.idle;
 
-  Future<void> loadCharacterSprites() async {
-    // Load & configure sprite assets
-    final left = await gameRef
-        .loadSprite('character/pl_${characterColor.value}_left.png');
-    final right = await gameRef
-        .loadSprite('character/pl_${characterColor.value}_right.png');
+    if (velocity.x < 0 && scale.x > 0) {
+      flipHorizontallyAroundCenter();
+      isFaceRight = false;
+    } else if (velocity.x > 0 && scale.x < 0) {
+      flipHorizontallyAroundCenter();
+      isFaceRight = true;
+    }
 
-    sprites = <PlayerState, Sprite>{
-      PlayerState.left: left,
-      PlayerState.right: right,
-    };
+    if (velocity.y > 0) {
+      playerState = PlayerState.falling;
+      isFall = true;
+    }
+
+    if (velocity.y < 0) {
+      playerState = PlayerState.jumping;
+      isFall = false;
+    }
+
+    current = playerState;
   }
+}
+
+class CustomHitbox {
+  final double offsetX;
+  final double offsetY;
+  final double width;
+  final double height;
+
+  CustomHitbox({
+    required this.offsetX,
+    required this.offsetY,
+    required this.width,
+    required this.height,
+  });
 }
