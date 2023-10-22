@@ -1,56 +1,78 @@
-import 'package:space_jump/game/game.dart';
+import 'dart:async';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'dart:math';
+import 'package:space_jump/game/game.dart';
 
-abstract class Platform<T> extends SpriteGroupComponent<T>
+class Platform extends SpriteAnimationComponent
     with HasGameRef<MyGame>, CollisionCallbacks {
-  // for collision
-  final RectangleHitbox hitbox;
-  // horizontal move
-  bool isMoving = false;
-
-  final Vector2 velocity = Vector2.zero();
-  double direction = 1;
-  double speed = 40;
+  final bool isVertical;
+  final double offNeg;
+  final double offPos;
 
   Platform({
-    super.position,
-    required this.hitbox,
-  }) : super(size: Vector2.all(100), priority: 2);
+    this.isVertical = false,
+    this.offNeg = 0,
+    this.offPos = 0,
+    position,
+    size,
+  }) : super(position: position, size: size);
 
+  static const double sawSpeed = 0.1;
+  static const moveSpeed = 20;
+  static const tileSize = 16;
+  double moveDirection = 1;
+  double rangeNeg = 0;
+  double rangePos = 0;
   @override
-  Future<void>? onLoad() async {
-    await super.onLoad();
+  FutureOr<void> onLoad() {
+    priority = -1;
+    add(RectangleHitbox());
 
-    // add hitbox in game for the collision detection
-    await add(hitbox);
-
-    // for the some platform can move x axis
-    final int rand = Random().nextInt(100);
-    if (rand > 0) isMoving = true;
-  }
-
-  void _move(double dt) {
-    // If move equals false, do nothing
-    if (!isMoving) return;
-
-    final double gameWidth = gameRef.size.x;
-
-    if (position.x <= 0) {
-      direction = 1;
-    } else if (position.x >= gameWidth - size.x) {
-      direction = -1;
+    if (isVertical) {
+      rangeNeg = position.y - offNeg * tileSize;
+      rangePos = position.y + offPos * tileSize;
+    } else {
+      rangeNeg = position.x - offNeg * tileSize;
+      rangePos = position.x + offPos * tileSize;
     }
 
-    velocity.x = direction * speed;
-
-    position += velocity * dt;
+    animation = SpriteAnimation.fromFrameData(
+        game.images.fromCache('platform/On (32x10).png'),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: sawSpeed,
+          textureSize: Vector2(32, 10),
+        ));
+    return super.onLoad();
   }
 
   @override
   void update(double dt) {
-    _move(dt);
+    if (isVertical) {
+      _moveVertically(dt);
+    } else {
+      _moveHorizontally(dt);
+    }
+
     super.update(dt);
+  }
+
+  void _moveVertically(double dt) {
+    if (position.y >= rangePos) {
+      moveDirection = -1;
+    } else if (position.y <= rangeNeg) {
+      moveDirection = 1;
+    }
+    position.y += moveDirection * moveSpeed * dt;
+  }
+
+  void _moveHorizontally(double dt) {
+    if (position.x >= rangePos) {
+      moveDirection = -1;
+    } else if (position.x <= rangeNeg) {
+      moveDirection = 1;
+    }
+    position.x += moveDirection * moveSpeed * dt;
   }
 }

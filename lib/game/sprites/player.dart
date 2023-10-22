@@ -93,7 +93,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     super.onCollision(intersectionPoints, other);
 
     // if the contact is with the enemy
-    if (other is EnemyPlatform && gameRef.gameManager.isPlaying) {
+    if (other is Platform && gameRef.gameManager.isPlaying) {
       gameRef.loseGame();
       return;
     }
@@ -114,7 +114,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     // if the contact is with the platform
     if (isMovingDown && isCollidingVertically) {
       switch (other) {
-        case NormalPlatform():
+        case Platform():
           jump();
           return;
       }

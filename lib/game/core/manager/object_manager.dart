@@ -1,12 +1,10 @@
 import 'package:space_jump/game/core/manager/index.dart';
 import 'package:space_jump/game/core/utils/index.dart';
+import 'package:space_jump/game/sprites/index.dart';
 import 'package:space_jump/game/game.dart';
-import 'package:flame/collisions.dart';
+import 'package:space_jump/globals.dart';
 import 'package:flame/components.dart';
 import 'dart:math';
-
-import 'package:space_jump/game/sprites/index.dart';
-import 'package:space_jump/globals.dart';
 
 final Random random = Random();
 
@@ -19,7 +17,7 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
 
   // platfom & enemy list
   final List<Platform> platforms = [];
-  final List<EnemyPlatform> enemies = [];
+  final List<Platform> enemies = [];
 
   // platform and enemy generate probability
   final probGen = ProbabilityGenerator();
@@ -41,9 +39,8 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
         currentY = generateNextY();
       }
       platforms.add(
-        NormalPlatform(
+        Platform(
           position: Vector2(currentX, currentY),
-          hitbox: RectangleHitbox(),
         ),
       );
 
@@ -64,12 +61,8 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
       if (topOfLowestPlatform > screenBottom) {
         var newPlatY = generateNextY();
         var newPlatX = generateNextX(100);
-        final nextPlat = NormalPlatform(
+        final nextPlat = Platform(
           position: Vector2(newPlatX, newPlatY),
-          hitbox: RectangleHitbox(
-            size: Vector2(30, 15),
-            position: Vector2(15, 7.5),
-          ),
         );
         add(nextPlat);
 
@@ -112,12 +105,8 @@ class ObjectManager extends Component with HasGameRef<MyGame> {
       var newPlatX = generateNextX(100);
 
       if (xAxis >= newPlatX - 50 && xAxis <= newPlatX + 150) {
-        var enemy = EnemyPlatform(
+        var enemy = Platform(
           position: Vector2(newPlatX, newPlatY),
-          hitbox: RectangleHitbox(
-            size: Vector2(25, 15),
-            position: Vector2(12.5, 7.5),
-          ),
         );
         add(enemy);
         enemies.add(enemy);

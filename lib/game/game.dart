@@ -25,6 +25,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
+    await images.loadAllImages();
     // Add world in game
     await add(world);
 
