@@ -23,6 +23,7 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
   final int movingRightInput = 1;
   Vector2 velocity = Vector2.zero();
   bool get isMovingDown => velocity.y > 0;
+
   GameManager gameManager = GameManager();
 
   // for the collision detection
@@ -93,20 +94,14 @@ class MyPlayer extends SpriteGroupComponent<PlayerState>
     super.onCollision(intersectionPoints, other);
 
     // if the contact is with the enemy
-    if (other is Platform && gameRef.gameManager.isPlaying) {
+    /*  if (other is Platform && gameRef.gameManager.isPlaying) {
       gameRef.loseGame();
       return;
-    }
+    } */
 
     bool isCollidingVertically = true;
 
     if (intersectionPoints.last.y == other.position.y) {
-      /* print("intersectionPoints.first: ${intersectionPoints.first.y}");
-      print("intersectionPoints.last: ${intersectionPoints.last.y}");
-      print("           *********************            ");
-      print("other.position.y: ${other.position.y}");
-      print(""); */
-
       isCollidingVertically =
           (intersectionPoints.first.y - intersectionPoints.last.y) < 5.0;
     }

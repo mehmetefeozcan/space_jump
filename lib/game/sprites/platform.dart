@@ -18,12 +18,13 @@ class Platform extends SpriteAnimationComponent
     size,
   }) : super(position: position, size: size);
 
-  static const double sawSpeed = 0.1;
+  static const double animationSpeed = 0.1;
   static const moveSpeed = 20;
   static const tileSize = 16;
   double moveDirection = 1;
   double rangeNeg = 0;
   double rangePos = 0;
+
   @override
   FutureOr<void> onLoad() {
     priority = -1;
@@ -41,9 +42,11 @@ class Platform extends SpriteAnimationComponent
         game.images.fromCache('platform/On (32x10).png'),
         SpriteAnimationData.sequenced(
           amount: 4,
-          stepTime: sawSpeed,
+          stepTime: animationSpeed,
           textureSize: Vector2(32, 10),
         ));
+
+    size = Vector2(64, 24);
     return super.onLoad();
   }
 
