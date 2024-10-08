@@ -5,15 +5,7 @@ import 'dart:async';
 import 'package:space_jump/game/game.dart';
 import 'package:space_jump/game/sprites/index.dart';
 
-enum PlayerState {
-  idle,
-  running,
-  jumping,
-  falling,
-  hit,
-  appearing,
-  disappearing
-}
+enum PlayerState { jumping, falling, hit }
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameRef<MyGame>, KeyboardHandler, CollisionCallbacks {
@@ -21,16 +13,16 @@ class Player extends SpriteAnimationGroupComponent
   Player({position, required this.character}) : super(position: position);
 
   late final SpriteAnimation hitAnimation;
-  late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   late final SpriteAnimation jumpingAnimation;
   late final SpriteAnimation fallingAnimation;
-  late final SpriteAnimation appearingAnimation;
-  late final SpriteAnimation disappearingAnimation;
+
   final double _stepTime = 0.05;
   final double _gravity = 9.8;
   final double _jumpForce = 580;
   final double _terminalVelocity = 300;
+
+  int hAxisInput = 0;
 
   bool hasJumped = false;
   bool isFaceRight = true;
@@ -79,8 +71,12 @@ class Player extends SpriteAnimationGroupComponent
       _updatePlayerState();
       _applyGravity(fixedDeltaTime);
 
+      velocity.x = hAxisInput * 400;
+      position.x += velocity.x * dt;
+
       accumulatedTime -= fixedDeltaTime;
     }
+
     super.update(dt);
   }
 
@@ -103,9 +99,6 @@ class Player extends SpriteAnimationGroupComponent
       PlayerState.falling: fallingAnimation,
       PlayerState.hit: hitAnimation,
     };
-
-    // Set Current Animation
-    current = PlayerState.idle;
   }
 
   SpriteAnimation _spriteAnimation(String state, int amount) {
@@ -131,36 +124,8 @@ class Player extends SpriteAnimationGroupComponent
     position.y += velocity.y * dt;
   }
 
-  /* void _checkVerticalCollisions() {
-    for (final block in gameRef.collisionBlocks) {
-      if (block.isPlatform) {
-        if (checkCollision(this, block)) {
-          if (velocity.y > 0) {
-            velocity.y = 0;
-            position.y = block.y - hitbox.height - hitbox.offsetY;
-            isOnGround = true;
-            break;
-          }
-        }
-      } else {
-        if (checkCollision(this, block)) {
-          if (velocity.y > 0) {
-            velocity.y = 0;
-            position.y = block.y - hitbox.height - hitbox.offsetY;
-            isOnGround = true;
-            break;
-          }
-          if (velocity.y < 0) {
-            velocity.y = 0;
-            position.y = block.y + block.height - hitbox.offsetY;
-          }
-        }
-      }
-    }
-  } */
-
   void _updatePlayerState() {
-    PlayerState playerState = PlayerState.idle;
+    PlayerState playerState = PlayerState.falling;
 
     if (velocity.x < 0 && scale.x > 0) {
       flipHorizontallyAroundCenter();
@@ -181,6 +146,16 @@ class Player extends SpriteAnimationGroupComponent
     }
 
     current = playerState;
+  }
+
+  moveRight() {
+    hAxisInput = 0;
+    hAxisInput += 1;
+  }
+
+  moveLeft() {
+    hAxisInput = 0;
+    hAxisInput -= 1;
   }
 }
 

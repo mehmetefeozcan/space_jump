@@ -37,7 +37,7 @@ class _GameViewState extends State<GameView> {
                 children: [
                   GestureDetector(
                     onTapDown: (details) {
-                      //game.player.moveLeft();
+                      game.player.moveLeft();
                     },
                     onTapUp: (details) {
                       //game.player.resetDirection();
@@ -50,7 +50,7 @@ class _GameViewState extends State<GameView> {
                   ),
                   GestureDetector(
                     onTapDown: (details) {
-                      //game.player.moveRight();
+                      game.player.moveRight();
                     },
                     onTapUp: (details) {
                       //game.player.resetDirection();
